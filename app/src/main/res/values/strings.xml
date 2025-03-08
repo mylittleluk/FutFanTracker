@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">FutFanTracker</string>
+    <string name="cadastrar_partida">Cadastrar Partida</string>
+    <string name="data">Data</string>
+    <string name="horario">Horário</string>
+    <string name="adversario">Adversário</string>
+    <string name="local">Local</string>
+    <string name="casa">Casa</string>
+    <string name="fora">Fora</string>
+    <string name="salvar">Salvar</string>
+    <string name="limpar">Limpar</string>
+    <string name="acompanhei_partida">Acompanhei a Partida</string>
+    <string name="os_campos_foram_limpos">Os campos foram limpos !</string>
+    <string name="por_favor_preencha_o_adversario">Por favor preencha o Adversário</string>
+    <string name="por_favor_preencha_uma_data_valida">Por favor preencha uma Data válida</string>
+    <string name="por_favor_insira_um_horario_valido">Por favor insira um horário válido</string>
+    <string name="hint_data">Ex: 01/01/2001</string>
+    <string name="hint_horario">Ex: 12:00</string>
+    <string name="por_favor_preencha_o_local_adequadamente">Por favor preencha o Local adequadamente</string>
+</resources>
