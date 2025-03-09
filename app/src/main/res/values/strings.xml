@@ -31,4 +31,12 @@
     <string name="copa_sulamericana">Copa Sulamericana</string>
     <string name="o_spinner_competicoes_nao_possui_valores">O Spinner Competições Não Possui Valores</string>
     <string name="competicao_valor">"Competição: "</string>
+    <string name="partida_ja_ocorreu">Partida Já Ocorreu</string>
+    <string name="sobre_a_partida">Sobre a Partida</string>
+    <string name="resultado">Resultado</string>
+    <string name="x">X</string>
+    <string name="por_favor_insira_o_resultado_adequadamente">Por favor preencha o resultado adequadamente</string>
+    <string name="partida_ainda_nao_ocorreu">Partida ainda não ocorreu</string>
+    <string name="placar_valor">"Placar: "</string>
+    <string name="x_valor">" X "</string>
 </resources>

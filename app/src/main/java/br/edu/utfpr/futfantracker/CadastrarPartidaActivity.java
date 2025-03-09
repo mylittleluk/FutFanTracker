@@ -17,9 +17,9 @@ import java.util.Date;
 
 public class CadastrarPartidaActivity extends AppCompatActivity {
 
-    private EditText editTextData, editTextHorario, editTextAdversario;
+    private EditText editTextData, editTextHorario, editTextAdversario, editTextResultadoCasa, editTextResultadoFora;
     private RadioGroup radioGroupLocal;
-    private CheckBox checkBoxAcompanheiPartida;
+    private CheckBox checkBoxAcompanheiPartida, checkBoxPartidaOcorreu;
     private Spinner spinnerCompeticao;
 
     @Override
@@ -30,9 +30,16 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData = findViewById(R.id.editTextData);
         editTextHorario = findViewById(R.id.editTextHorario);
         editTextAdversario = findViewById(R.id.editTextAdversario);
+        editTextResultadoCasa = findViewById(R.id.editTextNumberResultadoCasa);
+        editTextResultadoFora = findViewById(R.id.editTextNumberResultadoFora);
         radioGroupLocal = findViewById(R.id.radioGroupLocal);
         checkBoxAcompanheiPartida = findViewById(R.id.checkBoxAcompanheiPartida);
+        checkBoxPartidaOcorreu = findViewById(R.id.checkBoxPartidaOcorreu);
         spinnerCompeticao = findViewById(R.id.spinnerCompeticao);
+
+        editTextResultadoCasa.setEnabled(false);
+        editTextResultadoFora.setEnabled(false);
+        checkBoxAcompanheiPartida.setEnabled(false);
 
         //popularSpinner();
 
@@ -57,8 +64,16 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData.setText(null);
         editTextHorario.setText(null);
         editTextAdversario.setText(null);
+        editTextResultadoCasa.setText(null);
+        editTextResultadoFora.setText(null);
         radioGroupLocal.clearCheck();
+        checkBoxPartidaOcorreu.setChecked(false);
         checkBoxAcompanheiPartida.setChecked(false);
+        checkBoxAcompanheiPartida.setEnabled(false);
+        editTextResultadoCasa.setText(null);
+        editTextResultadoCasa.setEnabled(false);
+        editTextResultadoFora.setText(null);
+        editTextResultadoFora.setEnabled(false);
         editTextData.requestFocus();
         spinnerCompeticao.setSelection(0);
 
@@ -142,17 +157,72 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             return;
         }
 
-        // Checagem do Estado do Checkbox
-        boolean acompanheiPartida = checkBoxAcompanheiPartida.isChecked();
+        // Validação Sobre a Partida
+        boolean partidaOcorreu = checkBoxPartidaOcorreu.isChecked();
+        boolean resultadosValidos = false;
+        int resultadoCasa=0 , resultadoFora =0;
 
+        if(partidaOcorreu){
+            try{
+                String placarCasa = editTextResultadoCasa.getText().toString().trim();
+                String placarFora = editTextResultadoFora.getText().toString().trim();
+
+                // Validação Sobre campos inválidos ou vazios antes do Parse
+                if((placarCasa==null || placarCasa.isEmpty()) ||
+                        (placarFora==null || placarFora.isEmpty())){
+                    throw new Exception();
+                }
+
+                resultadoCasa = Integer.parseInt(placarCasa);
+                resultadoFora = Integer.parseInt(placarFora);
+
+                // Validação sobre Placares Absurdos
+                if((resultadoCasa<0 || resultadoCasa>=15) ||
+                        (resultadoFora<0 || resultadoFora>=15)){
+                            throw new Exception();
+                }
+
+                // Booleano de controle de resultados válidos
+                resultadosValidos = true;
+            }catch(Exception e){
+                Toast.makeText(this,
+                              R.string.por_favor_insira_o_resultado_adequadamente,
+                              Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        // Checagem do Estado do Checkbox
+        boolean acompanheiPartida = false;
+        if(checkBoxAcompanheiPartida.isEnabled()){
+            if(checkBoxAcompanheiPartida.isChecked()){
+                acompanheiPartida = true;
+            }
+        } else {
+            acompanheiPartida = false;
+        }
 
         Toast.makeText(this,
                        getString(R.string.data_valor)+dataFormatada+"\n"
                        +getString(R.string.horario_valor)+horarioFormatado+"\n"
-                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
                        +getString(R.string.adversario_valor)+adversario+"\n"
                        +getString(R.string.local_valor)+localPartida+"\n"
-                       +getString(R.string.competicao_valor)+competicao,
+                       +getString(R.string.competicao_valor)+competicao+"\n"
+                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
+                       +(partidaOcorreu && resultadosValidos ? getString(R.string.placar_valor)+resultadoCasa+getString(R.string.x_valor)+resultadoFora : getString(R.string.partida_ainda_nao_ocorreu) ),
                        Toast.LENGTH_LONG).show();
+    }
+
+    // Metodo de controle dos elementos da partida de acordo com estado do CheckBox
+    public void partidaOcorreu(View view){
+        if(checkBoxPartidaOcorreu.isChecked()){
+            checkBoxAcompanheiPartida.setEnabled(true);
+            editTextResultadoCasa.setEnabled(true);
+            editTextResultadoFora.setEnabled(true);
+        } else {
+            checkBoxAcompanheiPartida.setEnabled(false);
+            editTextResultadoCasa.setEnabled(false);
+            editTextResultadoFora.setEnabled(false);
+        }
     }
 }

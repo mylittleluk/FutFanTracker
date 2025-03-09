@@ -151,15 +151,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCompeticao" />
 
-        <CheckBox
-            android:id="@+id/checkBoxAcompanheiPartida"
+        <TextView
+            android:id="@+id/textViewSobrePartida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/acompanhei_partida"
+            android:labelFor="@id/checkBoxPartidaOcorreu"
+            android:text="@string/sobre_a_partida"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerCompeticao" />
+
+        <CheckBox
+            android:id="@+id/checkBoxPartidaOcorreu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:onClick="partidaOcorreu"
+            android:text="@string/partida_ja_ocorreu"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxAcompanheiPartida"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkBoxAcompanheiPartida" />
+
+        <CheckBox
+            android:id="@+id/checkBoxAcompanheiPartida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/acompanhei_partida"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxPartidaOcorreu"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSobrePartida" />
 
         <Button
             android:id="@+id/buttonSalvar"
@@ -171,7 +196,7 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonLimpar"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxAcompanheiPartida" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumberResultadoCasa" />
 
         <Button
             android:id="@+id/buttonLimpar"
@@ -183,6 +208,51 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buttonSalvar"
             app:layout_constraintTop_toTopOf="@+id/buttonSalvar" />
+
+        <TextView
+            android:id="@+id/textViewResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/resultado"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxPartidaOcorreu" />
+
+        <EditText
+            android:id="@+id/editTextNumberResultadoCasa"
+            android:layout_width="50dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@+id/editTextNumberResultadoFora"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewResultado" />
+
+        <EditText
+            android:id="@+id/editTextNumberResultadoFora"
+            android:layout_width="50dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/editTextNumberResultadoCasa"
+            app:layout_constraintTop_toTopOf="@+id/editTextNumberResultadoCasa" />
+
+        <TextView
+            android:id="@+id/textViewResultadoX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/x"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextNumberResultadoCasa"
+            app:layout_constraintEnd_toStartOf="@+id/editTextNumberResultadoFora"
+            app:layout_constraintStart_toEndOf="@+id/editTextNumberResultadoCasa"
+            app:layout_constraintTop_toTopOf="@+id/editTextNumberResultadoCasa" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
