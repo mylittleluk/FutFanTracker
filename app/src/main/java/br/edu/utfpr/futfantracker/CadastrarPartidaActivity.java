@@ -220,8 +220,11 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             editTextResultadoCasa.setEnabled(true);
             editTextResultadoFora.setEnabled(true);
         } else {
+            checkBoxAcompanheiPartida.setChecked(false);
             checkBoxAcompanheiPartida.setEnabled(false);
+            editTextResultadoCasa.setText(null);
             editTextResultadoCasa.setEnabled(false);
+            editTextResultadoFora.setText(null);
             editTextResultadoFora.setEnabled(false);
         }
     }
