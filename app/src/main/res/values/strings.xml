@@ -17,4 +17,10 @@
     <string name="hint_data">Ex: 01/01/2001</string>
     <string name="hint_horario">Ex: 12:00</string>
     <string name="por_favor_preencha_o_local_adequadamente">Por favor preencha o Local adequadamente</string>
+    <string name="data_valor">"Data: "</string>
+    <string name="horario_valor">"Horário: "</string>
+    <string name="acompanhei_a_partida">Acompanhei a Partida</string>
+    <string name="local_valor">"Local: "</string>
+    <string name="adversario_valor">"Adversario: "</string>
+    <string name="nao_acompanhei_a_partida">Não acompanhei a Partida</string>
 </resources>

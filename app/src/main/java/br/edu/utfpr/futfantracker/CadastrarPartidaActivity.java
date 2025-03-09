@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,7 @@ import java.util.Date;
 public class CadastrarPartidaActivity extends AppCompatActivity {
 
     private EditText editTextData, editTextHorario, editTextAdversario;
-    private RadioButton radioButtonCasa, radioButtonFora;
+    private RadioGroup radioGroupLocal;
     private CheckBox checkBoxAcompanheiPartida;
     private Button buttonSalvar, buttonLimpar;
 
@@ -28,8 +28,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData = findViewById(R.id.editTextData);
         editTextHorario = findViewById(R.id.editTextHorario);
         editTextAdversario = findViewById(R.id.editTextAdversario);
-        radioButtonCasa = findViewById(R.id.radioButtonCasa);
-        radioButtonFora = findViewById(R.id.radioButtonFora);
+        radioGroupLocal = findViewById(R.id.radioGroupLocal);
         checkBoxAcompanheiPartida = findViewById(R.id.checkBoxAcompanheiPartida);
         buttonSalvar = findViewById(R.id.buttonSalvar);
         buttonLimpar = findViewById(R.id.buttonLimpar);
@@ -39,10 +38,8 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData.setText(null);
         editTextHorario.setText(null);
         editTextAdversario.setText(null);
-        radioButtonCasa.setChecked(false);
-        radioButtonFora.setChecked(false);
+        radioGroupLocal.clearCheck();
         checkBoxAcompanheiPartida.setChecked(false);
-
         editTextData.requestFocus();
 
         Toast.makeText(this,
@@ -101,9 +98,18 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             return;
         }
 
+        // Checagem do Estado do Checkbox
+        boolean acompanheiPartida = checkBoxAcompanheiPartida.isChecked();
+
+        String localPartida;
+        int radioButtonId = radioGroupLocal.getCheckedRadioButtonId();
+
         // Validação RadioButton Local
-        if((radioButtonCasa.isChecked() == false && radioButtonFora.isChecked()==false) ||
-                (radioButtonFora.isChecked()==true && radioButtonCasa.isChecked()==true)){
+        if(radioButtonId == R.id.radioButtonCasa){
+            localPartida = getString(R.string.casa);
+        } else if (radioButtonId == R.id.radioButtonFora){
+            localPartida = getString(R.string.fora);
+        } else {
             Toast.makeText(this,
                     R.string.por_favor_preencha_o_local_adequadamente,
                     Toast.LENGTH_LONG).show();
@@ -111,8 +117,11 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this,
-                       "Data: "+dataFormatada+"\n"
-                       +"Horário: "+horarioFormatado,
+                       getString(R.string.data_valor)+dataFormatada+"\n"
+                       +getString(R.string.horario_valor)+horarioFormatado+"\n"
+                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
+                       +getString(R.string.adversario_valor)+adversario+"\n"
+                       +getString(R.string.local_valor)+localPartida,
                        Toast.LENGTH_LONG).show();
     }
 }
