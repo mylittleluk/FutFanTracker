@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="competicoes">
+        <item>@string/campeonato_estadual</item>
+        <item>@string/campeonato_brasileiro</item>
+        <item>@string/copa_do_brasil</item>
+        <item>@string/copa_libertadores</item>
+        <item>@string/copa_sulamericana</item>
+    </string-array>
+</resources>

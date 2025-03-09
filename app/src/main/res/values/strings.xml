@@ -23,4 +23,12 @@
     <string name="local_valor">"Local: "</string>
     <string name="adversario_valor">"Adversario: "</string>
     <string name="nao_acompanhei_a_partida">Não acompanhei a Partida</string>
+    <string name="competicao">Competição</string>
+    <string name="campeonato_estadual">Campeonato Estadual</string>
+    <string name="campeonato_brasileiro">Campeonato Brasileiro</string>
+    <string name="copa_do_brasil">Copa do Brasil</string>
+    <string name="copa_libertadores">Copa Libertadores</string>
+    <string name="copa_sulamericana">Copa Sulamericana</string>
+    <string name="o_spinner_competicoes_nao_possui_valores">O Spinner Competições Não Possui Valores</string>
+    <string name="competicao_valor">"Competição: "</string>
 </resources>
