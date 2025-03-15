@@ -1,7 +1,7 @@
 package br.edu.utfpr.futfantracker;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+//import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
     private ListView listViewPartidas;
     private List<Partida> listaPartidas;
+    private PartidaAdapter partidaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +62,15 @@ public class ListarPartidasActivity extends AppCompatActivity {
             listaPartidas.add(partida);
         }
 
-        ArrayAdapter<Partida> adapter = new ArrayAdapter<>(this,
-                                                            android.R.layout.simple_list_item_1,
-                                                            listaPartidas);
-        listViewPartidas.setAdapter(adapter);
+// Comentando Trecho com adapter antigo
+//        ArrayAdapter<Partida> adapter = new ArrayAdapter<>(this,
+//                                                            android.R.layout.simple_list_item_1,
+//                                                            listaPartidas);
+//        listViewPartidas.setAdapter(adapter);
+
+
+        // Usando o adapter customizado para exibir os dados formatados como desejado
+        partidaAdapter = new PartidaAdapter(this, listaPartidas);
+        listViewPartidas.setAdapter(partidaAdapter);
     }
 }
