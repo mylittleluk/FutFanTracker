@@ -7,4 +7,68 @@
         <item>@string/copa_libertadores</item>
         <item>@string/copa_sulamericana</item>
     </string-array>
+
+    <string-array name="partida_datas">
+        <item>25/01/2020</item>
+        <item>01/01/1996</item>
+        <item>17/06/2023</item>
+        <item>08/10/2006</item>
+        <item>30/12/2016</item>
+    </string-array>
+
+    <string-array name="partida_horarios">
+        <item>16:00</item>
+        <item>11:00</item>
+        <item>20:30</item>
+        <item>21:00</item>
+        <item>17:00</item>
+    </string-array>
+
+    <string-array name="partida_adversarios">
+        <item>Vasco</item>
+        <item>Fluminense</item>
+        <item>Bragantino</item>
+        <item>Paraná</item>
+        <item>São Paulo</item>
+    </string-array>
+
+    <integer-array name="partida_competicoes">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <integer-array name="partida_locais">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="partida_resultado_casa">
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="partida_resultado_fora">
+        <item>0</item>
+        <item>3</item>
+        <item>4</item>
+        <item>0</item>
+        <item>2</item>
+    </integer-array>
+
+    <integer-array name="partida_ocorreu">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
 </resources>
