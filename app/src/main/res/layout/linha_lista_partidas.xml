@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewRotuloData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/data_valor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewValorData"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloData"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewRotuloHorario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/horario_valor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloData" />
+
+    <TextView
+        android:id="@+id/textViewValorHorario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloHorario"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorData" />
+
+    <TextView
+        android:id="@+id/textViewRotuloAdversario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/adversario_valor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloHorario" />
+
+    <TextView
+        android:id="@+id/textViewValorAdversario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloAdversario"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorHorario" />
+
+    <TextView
+        android:id="@+id/textViewRotuloCompeticao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/competicao_valor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloAdversario" />
+
+    <TextView
+        android:id="@+id/textViewValorCompeticao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloCompeticao"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorAdversario" />
+
+    <TextView
+        android:id="@+id/textViewRotuloLocal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/local_valor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloCompeticao" />
+
+    <TextView
+        android:id="@+id/textViewValorLocal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloLocal"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloCompeticao" />
+
+    <TextView
+        android:id="@+id/textViewValorJaOcorreu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRotuloLocal" />
+
+    <TextView
+        android:id="@+id/textViewRotuloResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/resultado"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorJaOcorreu" />
+
+    <TextView
+        android:id="@+id/textViewRotuloResultadoCasa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/casa"
+        app:layout_constraintEnd_toStartOf="@+id/textViewRotuloResultadoFora"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloResultado"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorResultadoCasa" />
+
+    <TextView
+        android:id="@+id/textViewRotuloResultadoFora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fora"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloResultadoCasa"
+        app:layout_constraintTop_toTopOf="@+id/textViewRotuloResultadoCasa" />
+
+    <TextView
+        android:id="@+id/textViewValorResultadoCasa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/textViewValorResultadoFora"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewRotuloResultado"
+        app:layout_constraintTop_toTopOf="@+id/textViewRotuloResultado" />
+
+    <TextView
+        android:id="@+id/textViewValorResultadoFora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewValorResultadoCasa"
+        app:layout_constraintTop_toTopOf="@+id/textViewValorResultadoCasa" />
+
+    <TextView
+        android:id="@+id/textViewRotuloResultadoX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/x"
+        app:layout_constraintEnd_toStartOf="@+id/textViewValorResultadoFora"
+        app:layout_constraintStart_toEndOf="@+id/textViewValorResultadoCasa"
+        app:layout_constraintTop_toTopOf="@+id/textViewValorResultadoCasa" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
