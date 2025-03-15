@@ -39,4 +39,6 @@
     <string name="partida_ainda_nao_ocorreu">Partida ainda não ocorreu</string>
     <string name="placar_valor">"Placar: "</string>
     <string name="x_valor">" X "</string>
+    <string name="a_partida_com_o">"A Partida com o "</string>
+    <string name="foi_selecionada">" foi selecionada"</string>
 </resources>

@@ -2,7 +2,10 @@ package br.edu.utfpr.futfantracker;
 
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +24,17 @@ public class ListarPartidasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listar_partidas);
 
         listViewPartidas = findViewById(R.id.listViewPartidas);
+
+        listViewPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Partida partida = (Partida) listViewPartidas.getItemAtPosition(position);
+
+                Toast.makeText(getApplicationContext(),
+                               getString(R.string.a_partida_com_o)+partida.getAdversario()+getString(R.string.foi_selecionada),
+                               Toast.LENGTH_LONG).show();
+            }
+        });
 
         popularListaPartidas();
     }
