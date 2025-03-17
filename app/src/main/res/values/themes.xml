@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FutFanTracker" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.FutFanTracker" parent="Theme.Material3.Light">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+        <item name="colorPrimary">@color/azul</item>
+        <item name="colorPrimaryVariant">@color/azul_escuro</item>
+        <item name="colorOnPrimary">@color/branco</item>
 
-    <style name="Theme.FutFanTracker" parent="Base.Theme.FutFanTracker" />
+    </style>
 </resources>
