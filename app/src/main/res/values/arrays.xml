@@ -14,6 +14,11 @@
         <item>17/06/2023</item>
         <item>08/10/2006</item>
         <item>30/12/2016</item>
+        <item>30/01/2020</item>
+        <item>03/04/2022</item>
+        <item>08/08/2019</item>
+        <item>11/07/2019</item>
+        <item>25/02/2018</item>
     </string-array>
 
     <string-array name="partida_horarios">
@@ -22,6 +27,11 @@
         <item>20:30</item>
         <item>21:00</item>
         <item>17:00</item>
+        <item>10:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
     </string-array>
 
     <string-array name="partida_adversarios">
@@ -30,6 +40,11 @@
         <item>Bragantino</item>
         <item>Paraná</item>
         <item>São Paulo</item>
+        <item>Botafogo</item>
+        <item>Internacional</item>
+        <item>Volta Redonda</item>
+        <item>Palmeiras</item>
+        <item>Corinthians</item>
     </string-array>
 
     <integer-array name="partida_competicoes">
@@ -38,9 +53,19 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>2</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+        <item>0</item>
     </integer-array>
 
     <integer-array name="partida_locais">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
         <item>0</item>
         <item>0</item>
         <item>1</item>
@@ -54,6 +79,11 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>2</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+        <item>0</item>
     </integer-array>
 
     <integer-array name="partida_resultado_fora">
@@ -62,9 +92,19 @@
         <item>4</item>
         <item>0</item>
         <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>0</item>
+        <item>0</item>
+        <item>3</item>
     </integer-array>
 
     <integer-array name="partida_ocorreu">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
         <item>1</item>
         <item>1</item>
         <item>1</item>
