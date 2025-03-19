@@ -1,5 +1,6 @@
 package br.edu.utfpr.futfantracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_partidas);
+        setTitle(getString(R.string.partidas));
 
         listViewPartidas = findViewById(R.id.listViewPartidas);
 
@@ -86,5 +88,13 @@ public class ListarPartidasActivity extends AppCompatActivity {
         // Usando o adapter customizado para exibir os dados formatados como desejado
         partidaAdapter = new PartidaAdapter(this, listaPartidas);
         listViewPartidas.setAdapter(partidaAdapter);
+    }
+
+    public void abrirSobre(View view){
+        // Intent Explícita
+        Intent intentSobre = new Intent(this, SobreActivity.class);
+
+        // Activity Destino aberta mas sem passagem de parametros
+        startActivity(intentSobre);
     }
 }

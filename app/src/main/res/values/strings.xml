@@ -41,4 +41,9 @@
     <string name="x_valor">" X "</string>
     <string name="a_partida_com_o">"A Partida com o "</string>
     <string name="foi_selecionada">" foi selecionada"</string>
+    <string name="sobre">Sobre</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="sobre_descricao">Projeto App Android FutFanTracker - Pós Graduação Java UTFPR</string>
+    <string name="autor">Autor: Lucas Silva Araújo</string>
+    <string name="partidas">Partidas</string>
 </resources>
