@@ -46,4 +46,6 @@
     <string name="sobre_descricao">Projeto App Android FutFanTracker - Pós Graduação Java UTFPR</string>
     <string name="autor">Autor: Lucas Silva Araújo</string>
     <string name="partidas">Partidas</string>
+    <string name="descricao_app">Este app auxilia no controle de partidas do seu time do coração</string>
+    <string name="email">Email: lucasjprn@hotmail.com</string>
 </resources>

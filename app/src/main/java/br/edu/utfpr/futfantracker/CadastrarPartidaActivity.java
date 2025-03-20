@@ -1,8 +1,10 @@
 package br.edu.utfpr.futfantracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 //import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -17,6 +19,16 @@ import java.util.Date;
 
 public class CadastrarPartidaActivity extends AppCompatActivity {
 
+    public static final String KEY_DATA = "KEY_DATA";
+    public static final String KEY_HORARIO = "KEY_HORARIO";
+    public static final String KEY_ADVERSARIO = "KEY_ADVERSARIO";
+    public static final String KEY_LOCAL = "KEY_LOCAL";
+    public static final String KEY_COMPETICAO = "KEY_COMPETICAO";
+    public static final String KEY_ACOMPANHEI_PARTIDA = "KEY_ACOMPANHEI_PARTIDA";
+    public static final String KEY_PARTIDA_OCORREU = "KEY_PARTIDA_OCORREU";
+    public static final String KEY_RESULTADOS_VALIDOS = "KEY_RESULTADOS_VALIDOS";
+    public static final String KEY_RESULTADO_CASA = "KEY_RESULTADO_CASA";
+    public static final String KEY_RESULTADO_FORA = "KEY_RESULTADO_FORA";
     private EditText editTextData, editTextHorario, editTextAdversario, editTextResultadoCasa, editTextResultadoFora;
     private RadioGroup radioGroupLocal;
     private CheckBox checkBoxAcompanheiPartida, checkBoxPartidaOcorreu;
@@ -26,6 +38,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_partida);
+        setTitle(R.string.cadastrar_partida);
 
         editTextData = findViewById(R.id.editTextData);
         editTextHorario = findViewById(R.id.editTextHorario);
@@ -133,14 +146,14 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
 
         adversario = adversario.trim();
 
-        String localPartida;
+        Local localPartida;
         int radioButtonId = radioGroupLocal.getCheckedRadioButtonId();
 
         // Validação RadioButton Local
         if(radioButtonId == R.id.radioButtonCasa){
-            localPartida = getString(R.string.casa);
+            localPartida = Local.Casa;
         } else if (radioButtonId == R.id.radioButtonFora){
-            localPartida = getString(R.string.fora);
+            localPartida = Local.Fora;
         } else {
             Toast.makeText(this,
                     R.string.por_favor_preencha_o_local_adequadamente,
@@ -149,8 +162,8 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         }
 
         // Check Spinner competições
-        String competicao = (String) spinnerCompeticao.getSelectedItem();
-        if(competicao == null){
+        int competicao = spinnerCompeticao.getSelectedItemPosition();
+        if(competicao == AdapterView.INVALID_POSITION){
             Toast.makeText(this,
                     R.string.o_spinner_competicoes_nao_possui_valores,
                     Toast.LENGTH_LONG).show();
@@ -202,15 +215,30 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             acompanheiPartida = false;
         }
 
-        Toast.makeText(this,
-                       getString(R.string.data_valor)+dataFormatada+"\n"
-                       +getString(R.string.horario_valor)+horarioFormatado+"\n"
-                       +getString(R.string.adversario_valor)+adversario+"\n"
-                       +getString(R.string.local_valor)+localPartida+"\n"
-                       +getString(R.string.competicao_valor)+competicao+"\n"
-                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
-                       +(partidaOcorreu && resultadosValidos ? getString(R.string.placar_valor)+resultadoCasa+getString(R.string.x_valor)+resultadoFora : getString(R.string.partida_ainda_nao_ocorreu) ),
-                       Toast.LENGTH_LONG).show();
+        Intent intentResposta = new Intent();
+        intentResposta.putExtra(KEY_DATA, dataFormatada);
+        intentResposta.putExtra(KEY_HORARIO, horarioFormatado);
+        intentResposta.putExtra(KEY_ADVERSARIO, adversario);
+        intentResposta.putExtra(KEY_LOCAL, localPartida.toString());
+        intentResposta.putExtra(KEY_COMPETICAO, competicao);
+        //intentResposta.putExtra(KEY_ACOMPANHEI_PARTIDA, acompanheiPartida);
+        intentResposta.putExtra(KEY_PARTIDA_OCORREU, partidaOcorreu);
+        intentResposta.putExtra(KEY_RESULTADO_CASA, resultadoCasa);
+        intentResposta.putExtra(KEY_RESULTADO_FORA, resultadoFora);
+
+        setResult(CadastrarPartidaActivity.RESULT_OK, intentResposta);
+        finish();
+
+
+//        Toast.makeText(this,
+//                       getString(R.string.data_valor)+dataFormatada+"\n"
+//                       +getString(R.string.horario_valor)+horarioFormatado+"\n"
+//                       +getString(R.string.adversario_valor)+adversario+"\n"
+//                       +getString(R.string.local_valor)+localPartida+"\n"
+//                       +getString(R.string.competicao_valor)+competicao+"\n"
+//                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
+//                       +(partidaOcorreu && resultadosValidos ? getString(R.string.placar_valor)+resultadoCasa+getString(R.string.x_valor)+resultadoFora : getString(R.string.partida_ainda_nao_ocorreu) ),
+//                       Toast.LENGTH_LONG).show();
     }
 
     // Metodo de controle dos elementos da partida de acordo com estado do CheckBox
