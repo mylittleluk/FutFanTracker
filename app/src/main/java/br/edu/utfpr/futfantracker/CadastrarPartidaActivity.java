@@ -2,6 +2,8 @@ package br.edu.utfpr.futfantracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 //import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
@@ -11,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
@@ -73,7 +76,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
 //        spinnerCompeticao.setAdapter(adapter);
 //    }
 
-    public void limparCampos(View view){
+    public void limparCampos(){
         editTextData.setText(null);
         editTextHorario.setText(null);
         editTextAdversario.setText(null);
@@ -95,7 +98,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
                        Toast.LENGTH_LONG).show();
     }
 
-    public void salvarCampos(View view){
+    public void salvarCampos(){
         String adversario = editTextAdversario.getText().toString();
         String dataInserida = editTextData.getText().toString();
         String horarioInserido = editTextHorario.getText().toString();
@@ -254,6 +257,26 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             editTextResultadoCasa.setEnabled(false);
             editTextResultadoFora.setText(null);
             editTextResultadoFora.setEnabled(false);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cadastrar_partida_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idMenuItem = item.getItemId();
+        if(idMenuItem == R.id.menuItemSalvar){
+            salvarCampos();
+            return true;
+        } else if(idMenuItem == R.id.menuItemLimpar){
+            limparCampos();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

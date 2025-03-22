@@ -3,6 +3,8 @@ package br.edu.utfpr.futfantracker;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +14,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -94,7 +97,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
         listViewPartidas.setAdapter(partidaAdapter);
     }
 
-    public void abrirSobre(View view){
+    public void abrirSobre(){
         // Intent Explícita
         Intent intentSobre = new Intent(this, SobreActivity.class);
 
@@ -145,12 +148,32 @@ public class ListarPartidasActivity extends AppCompatActivity {
             }
     );
 
-    public void abrirCadastroPartida(View view){
+    public void abrirCadastroPartida(){
         Intent intentAbertura = new Intent(this, CadastrarPartidaActivity.class);
 
         // Chamar a abertura da outra activity via Intent criada (com o destino delimitado)
         launcherCadastrarPartida.launch(intentAbertura);
 
         // O Launcher vai amarrar o meu contrato de envio/recepção de extras via bundle/intent.
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.listar_partidas_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idMenuItem = item.getItemId();
+        if(idMenuItem == R.id.menuItemAdicionar){
+            abrirCadastroPartida();
+            return true;
+        } else if (idMenuItem == R.id.menuItemSobre){
+            abrirSobre();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
