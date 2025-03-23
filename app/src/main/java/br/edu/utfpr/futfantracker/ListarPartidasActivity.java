@@ -35,6 +35,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
     private ActionMode actionMode;
     private View viewSelecionada;
     private Drawable backgroundDrawable;
+    public static final String ARQUIVO_PREFERENCIAS = "br.edu.utfpr.futfantracker.PREFERENCIAS";
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override

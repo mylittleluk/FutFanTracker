@@ -1,6 +1,8 @@
 package br.edu.utfpr.futfantracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,15 +35,20 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
     public static final String KEY_RESULTADO_CASA = "KEY_RESULTADO_CASA";
     public static final String KEY_RESULTADO_FORA = "KEY_RESULTADO_FORA";
     public static final String KEY_MODO = "MODO";
+    public static final String KEY_SUGERIR_COMPETICAO = "SUGERIR_COMPETICAO";
+    public static final String KEY_ULTIMA_COMPETICAO = "ULTIMA_COMPETICAO";
     public static final int MODO_NOVO = 0;
     public static final int MODO_EDITAR = 1;
     private int modo;
     private Partida partidaOriginal;
+    private boolean sugerirCompeticao = false;
+    private int ultimaCompeticao = 0;
     private EditText editTextData, editTextHorario, editTextAdversario, editTextResultadoCasa, editTextResultadoFora;
     private RadioGroup radioGroupLocal;
     private CheckBox checkBoxAcompanheiPartida, checkBoxPartidaOcorreu;
     private Spinner spinnerCompeticao;
     private RadioButton radioButtonCasa, radioButtonFora;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,9 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         radioButtonCasa = findViewById(R.id.radioButtonCasa);
         radioButtonFora = findViewById(R.id.radioButtonFora);
 
+        // Lê a preferencia presente no SharedPreferences direto na criação da activity
+        lerPreferencias();
+
         editTextResultadoCasa.setEnabled(false);
         editTextResultadoFora.setEnabled(false);
         checkBoxAcompanheiPartida.setEnabled(false);
@@ -75,6 +85,12 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             modo = bundle.getInt(KEY_MODO);
             if(modo == MODO_NOVO){
                 setTitle(getString(R.string.cadastrar_partida));
+
+                // Reflete o valor salvo no SharedPreferences direto no elemento da Activity
+                if(sugerirCompeticao){
+                    spinnerCompeticao.setSelection(ultimaCompeticao);
+                }
+
             } else {
                 // Alterando o titulo da activity conforme o modo
                 setTitle(getString(R.string.editar_partida));
@@ -298,6 +314,9 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
 
         }
 
+        // salvar a ultima cometicao selecionada no sharedpreferences
+        salvarUltimaCompeticao(competicao);
+
         Intent intentResposta = new Intent();
         intentResposta.putExtra(KEY_DATA, dataFormatada);
         intentResposta.putExtra(KEY_HORARIO, horarioFormatado);
@@ -347,6 +366,14 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Reflete o valor do SharedPreferences na criação do menu
+        MenuItem item = menu.findItem(R.id.menuItemSugerirCompeticao);
+        item.setChecked(sugerirCompeticao);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int idMenuItem = item.getItemId();
         if(idMenuItem == R.id.menuItemSalvar){
@@ -355,8 +382,43 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         } else if(idMenuItem == R.id.menuItemLimpar){
             limparCampos();
             return true;
+        } else if (idMenuItem == R.id.menuItemSugerirCompeticao){
+            boolean menuItemValor = !item.isChecked();
+            salvarSugerirCompeticao(menuItemValor);
+            item.setChecked(menuItemValor);
+
+            // Ao ativar a opção, o elemento já é imediatamente atualizado com o ultimo valor
+            if(sugerirCompeticao){
+                spinnerCompeticao.setSelection(ultimaCompeticao);
+            }
+
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    private void lerPreferencias(){
+        SharedPreferences shared = getSharedPreferences(ListarPartidasActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        shared.getBoolean(KEY_SUGERIR_COMPETICAO, sugerirCompeticao);
+        shared.getInt(KEY_ULTIMA_COMPETICAO, ultimaCompeticao);
+    }
+
+    private void salvarSugerirCompeticao(boolean novoValor){
+        SharedPreferences shared = getSharedPreferences(ListarPartidasActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putBoolean(KEY_SUGERIR_COMPETICAO, novoValor);
+        editor.commit();
+        sugerirCompeticao = novoValor;
+    }
+
+    private void salvarUltimaCompeticao(int novoValor){
+        SharedPreferences shared = getSharedPreferences(ListarPartidasActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putInt(KEY_ULTIMA_COMPETICAO, novoValor);
+        editor.commit();
+        ultimaCompeticao = novoValor;
+    }
+
+
 }
