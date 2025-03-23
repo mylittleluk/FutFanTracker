@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,19 +30,22 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
     public static final String KEY_COMPETICAO = "KEY_COMPETICAO";
     public static final String KEY_ACOMPANHEI_PARTIDA = "KEY_ACOMPANHEI_PARTIDA";
     public static final String KEY_PARTIDA_OCORREU = "KEY_PARTIDA_OCORREU";
-    public static final String KEY_RESULTADOS_VALIDOS = "KEY_RESULTADOS_VALIDOS";
     public static final String KEY_RESULTADO_CASA = "KEY_RESULTADO_CASA";
     public static final String KEY_RESULTADO_FORA = "KEY_RESULTADO_FORA";
+    public static final String KEY_MODO = "MODO";
+    public static final int MODO_NOVO = 0;
+    public static final int MODO_EDITAR = 1;
+    private int modo;
     private EditText editTextData, editTextHorario, editTextAdversario, editTextResultadoCasa, editTextResultadoFora;
     private RadioGroup radioGroupLocal;
     private CheckBox checkBoxAcompanheiPartida, checkBoxPartidaOcorreu;
     private Spinner spinnerCompeticao;
+    private RadioButton radioButtonCasa, radioButtonFora;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_partida);
-        setTitle(R.string.cadastrar_partida);
 
         editTextData = findViewById(R.id.editTextData);
         editTextHorario = findViewById(R.id.editTextHorario);
@@ -52,10 +56,62 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         checkBoxAcompanheiPartida = findViewById(R.id.checkBoxAcompanheiPartida);
         checkBoxPartidaOcorreu = findViewById(R.id.checkBoxPartidaOcorreu);
         spinnerCompeticao = findViewById(R.id.spinnerCompeticao);
+        radioButtonCasa = findViewById(R.id.radioButtonCasa);
+        radioButtonFora = findViewById(R.id.radioButtonFora);
 
         editTextResultadoCasa.setEnabled(false);
         editTextResultadoFora.setEnabled(false);
         checkBoxAcompanheiPartida.setEnabled(false);
+
+        // Recupera a intent que foi usada pra abrir a activity
+        Intent intentAbertura = getIntent();
+
+        // Recupero as extras que foram passadas na intent
+        Bundle bundle = intentAbertura.getExtras();
+
+        if(bundle != null){
+            // recupera a chave de modo que veio na intent de abertura da activity
+            modo = bundle.getInt(KEY_MODO);
+            if(modo == MODO_NOVO){
+                setTitle(getString(R.string.cadastrar_partida));
+            } else {
+                // Alterando o titulo da activity conforme o modo
+                setTitle(getString(R.string.editar_partida));
+
+                // Recuperando os parametros do objeto partida recebidos via intent de
+                // abertura da activity
+                String data = bundle.getString(CadastrarPartidaActivity.KEY_DATA);
+                String horario = bundle.getString(CadastrarPartidaActivity.KEY_HORARIO);
+                String adversario = bundle.getString(CadastrarPartidaActivity.KEY_ADVERSARIO);
+                String localTexto = bundle.getString(CadastrarPartidaActivity.KEY_LOCAL);
+                int competicao = bundle.getInt(CadastrarPartidaActivity.KEY_COMPETICAO);
+                int resultadoCasa = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_CASA);
+                int resultadoFora = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_FORA);
+                boolean jaOcorreu = bundle.getBoolean(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU);
+                boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
+                Local local = Local.valueOf(localTexto);
+
+                // Usar os parametros recuperados para atualizar os elementos da activity
+                editTextData.setText(data);
+                editTextHorario.setText(horario);
+                editTextAdversario.setText(adversario);
+                if(local == Local.Casa){
+                    radioButtonCasa.setChecked(true);
+                } else if (local == Local.Fora) {
+                    radioButtonFora.setChecked(true);
+                }
+                spinnerCompeticao.setSelection(competicao);
+                editTextResultadoCasa.setText(String.valueOf(resultadoCasa));
+                editTextResultadoFora.setText(String.valueOf(resultadoFora));
+                checkBoxPartidaOcorreu.setChecked(jaOcorreu);
+                checkBoxAcompanheiPartida.setChecked(acompanheiPartida);
+//                if(!jaOcorreu){
+//                    editTextResultadoCasa.setEnabled(false);
+//                    editTextResultadoFora.setEnabled(false);
+//                    checkBoxAcompanheiPartida.setEnabled(false);
+//                }
+            }
+        }
 
         //popularSpinner();
 
@@ -106,6 +162,10 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         Date horarioValidado;
         String dataFormatada;
         String horarioFormatado;
+        boolean partidaOcorreu;
+        int resultadoCasa=0 , resultadoFora=0;
+        int competicao;
+        boolean acompanheiPartida = false;
 
         // Validação Data
         SimpleDateFormat padraoEntradaData = new SimpleDateFormat("dd/MM/yyyy");
@@ -165,7 +225,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         }
 
         // Check Spinner competições
-        int competicao = spinnerCompeticao.getSelectedItemPosition();
+        competicao = spinnerCompeticao.getSelectedItemPosition();
         if(competicao == AdapterView.INVALID_POSITION){
             Toast.makeText(this,
                     R.string.o_spinner_competicoes_nao_possui_valores,
@@ -174,9 +234,9 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         }
 
         // Validação Sobre a Partida
-        boolean partidaOcorreu = checkBoxPartidaOcorreu.isChecked();
-        boolean resultadosValidos = false;
-        int resultadoCasa=0 , resultadoFora =0;
+        partidaOcorreu = checkBoxPartidaOcorreu.isChecked();
+        //boolean resultadosValidos = false;
+
 
         if(partidaOcorreu){
             try{
@@ -199,7 +259,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
                 }
 
                 // Booleano de controle de resultados válidos
-                resultadosValidos = true;
+                //resultadosValidos = true;
             }catch(Exception e){
                 Toast.makeText(this,
                               R.string.por_favor_insira_o_resultado_adequadamente,
@@ -209,7 +269,6 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         }
 
         // Checagem do Estado do Checkbox
-        boolean acompanheiPartida = false;
         if(checkBoxAcompanheiPartida.isEnabled()){
             if(checkBoxAcompanheiPartida.isChecked()){
                 acompanheiPartida = true;
@@ -224,7 +283,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         intentResposta.putExtra(KEY_ADVERSARIO, adversario);
         intentResposta.putExtra(KEY_LOCAL, localPartida.toString());
         intentResposta.putExtra(KEY_COMPETICAO, competicao);
-        //intentResposta.putExtra(KEY_ACOMPANHEI_PARTIDA, acompanheiPartida);
+        intentResposta.putExtra(KEY_ACOMPANHEI_PARTIDA, acompanheiPartida);
         intentResposta.putExtra(KEY_PARTIDA_OCORREU, partidaOcorreu);
         intentResposta.putExtra(KEY_RESULTADO_CASA, resultadoCasa);
         intentResposta.putExtra(KEY_RESULTADO_FORA, resultadoFora);

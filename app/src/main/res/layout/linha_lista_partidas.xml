@@ -122,6 +122,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewRotuloLocal" />
 
     <TextView
+        android:id="@+id/textViewAcompanheiPartida"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewValorJaOcorreu" />
+
+    <TextView
         android:id="@+id/textViewRotuloResultado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -129,7 +140,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/resultado"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewValorJaOcorreu" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewAcompanheiPartida" />
 
     <TextView
         android:id="@+id/textViewRotuloResultadoCasa"

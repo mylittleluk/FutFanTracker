@@ -24,6 +24,7 @@ public class PartidaAdapter extends BaseAdapter {
         public TextView textViewValorCompeticao;
         public TextView textViewValorLocal;
         public TextView textViewValorJaOcorreu;
+        public TextView textViewAcompanheiPartida;
         public TextView textViewValorResultadoCasa;
         public TextView textViewValorResultadoFora;
     }
@@ -72,6 +73,7 @@ public class PartidaAdapter extends BaseAdapter {
             holder.textViewValorCompeticao = convertView.findViewById(R.id.textViewValorCompeticao);
             holder.textViewValorLocal = convertView.findViewById(R.id.textViewValorLocal);
             holder.textViewValorJaOcorreu = convertView.findViewById(R.id.textViewValorJaOcorreu);
+            holder.textViewAcompanheiPartida = convertView.findViewById(R.id.textViewAcompanheiPartida);
             holder.textViewValorResultadoCasa = convertView.findViewById(R.id.textViewValorResultadoCasa);
             holder.textViewValorResultadoFora = convertView.findViewById(R.id.textViewValorResultadoFora);
 
@@ -101,11 +103,18 @@ public class PartidaAdapter extends BaseAdapter {
                 holder.textViewValorLocal.setText(R.string.fora);
         }
 
-        // Tratamento Booleano
+        // Tratamento Booleano Já ocorreu
         if(partida.isJaOcorreu()){
             holder.textViewValorJaOcorreu.setText(R.string.partida_ja_ocorreu);
         } else {
             holder.textViewValorJaOcorreu.setText(R.string.partida_ainda_nao_ocorreu);
+        }
+
+        // Tratamento Booleano Acompanhei Partida
+        if(partida.isAcompanheiPartida()){
+            holder.textViewAcompanheiPartida.setText(R.string.acompanhei_a_partida);
+        } else {
+            holder.textViewAcompanheiPartida.setText(R.string.nao_acompanhei_a_partida);
         }
 
         holder.textViewValorResultadoCasa.setText(String.valueOf(partida.getResultadoCasa()));

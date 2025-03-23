@@ -3,12 +3,11 @@ package br.edu.utfpr.futfantracker;
 public class Partida {
 
     private String data, horario, adversario;
-    private int competicao;
     private Local local;
-    private int resultadoCasa, resultadoFora;
-    private boolean jaOcorreu;
+    private int competicao, resultadoCasa, resultadoFora;
+    private boolean jaOcorreu, acompanheiPartida;
 
-    public Partida(String data, String horario, String adversario, Local local, int competicao, int resultadoCasa, int resultadoFora, boolean jaOcorreu) {
+    public Partida(String data, String horario, String adversario, Local local, int competicao, int resultadoCasa, int resultadoFora, boolean jaOcorreu, boolean acompanheiPartida) {
         this.data = data;
         this.horario = horario;
         this.adversario = adversario;
@@ -17,6 +16,7 @@ public class Partida {
         this.resultadoCasa = resultadoCasa;
         this.resultadoFora = resultadoFora;
         this.jaOcorreu = jaOcorreu;
+        this.acompanheiPartida = acompanheiPartida;
     }
 
     public boolean isJaOcorreu() {
@@ -83,6 +83,14 @@ public class Partida {
         this.data = data;
     }
 
+    public boolean isAcompanheiPartida() {
+        return acompanheiPartida;
+    }
+
+    public void setAcompanheiPartida(boolean acompanheiPartida) {
+        this.acompanheiPartida = acompanheiPartida;
+    }
+
     @Override
     public String toString() {
         return  data + "\n" +
@@ -90,8 +98,9 @@ public class Partida {
                 adversario + "\n" +
                 competicao + "\n" +
                 local + "\n" +
+                jaOcorreu + "\n" +
+                acompanheiPartida + "\n" +
                 resultadoCasa + "\n" +
-                resultadoFora + "\n" +
-                jaOcorreu;
+                resultadoFora;
     }
 }
