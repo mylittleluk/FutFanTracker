@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListarPartidasActivity extends AppCompatActivity {
@@ -218,6 +219,8 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             // Adicionar o objeto partida no ArrayList de Partidas
                             listaPartidas.add(partida);
 
+                            Collections.sort(listaPartidas, Partida.ordenacaoPorData);
+
                             // Notificar o adapter customizado que os dados foram atualizados
                             // pra que possa ser atualizado
                             partidaAdapter.notifyDataSetChanged();
@@ -284,6 +287,8 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             partida.setResultadoFora(resultadoFora);
                             partida.setJaOcorreu(jaOcorreu);
                             partida.setAcompanheiPartida(acompanheiPartida);
+
+                            Collections.sort(listaPartidas, Partida.ordenacaoPorData);
 
                             // Notificar o adapter customizado que os dados foram atualizados
                             // pra que possa ser atualizado

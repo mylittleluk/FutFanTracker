@@ -1,6 +1,29 @@
 package br.edu.utfpr.futfantracker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+
 public class Partida {
+
+    public static Comparator<Partida> ordenacaoPorData = new Comparator<Partida>() {
+        @Override
+        public int compare(Partida p1, Partida p2) {
+            int result = 0;
+            SimpleDateFormat padraoEntradaData = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                // String source -> Date Target
+                Date datap1 = padraoEntradaData.parse(p1.getData());
+                Date datap2 = padraoEntradaData.parse(p2.getData());
+                result = datap1.compareTo(datap2);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            return result;
+        }
+    };
 
     private String data, horario, adversario;
     private Local local;
