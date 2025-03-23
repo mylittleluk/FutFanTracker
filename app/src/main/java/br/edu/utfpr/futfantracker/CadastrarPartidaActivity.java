@@ -36,6 +36,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
     public static final int MODO_NOVO = 0;
     public static final int MODO_EDITAR = 1;
     private int modo;
+    private Partida partidaOriginal;
     private EditText editTextData, editTextHorario, editTextAdversario, editTextResultadoCasa, editTextResultadoFora;
     private RadioGroup radioGroupLocal;
     private CheckBox checkBoxAcompanheiPartida, checkBoxPartidaOcorreu;
@@ -90,6 +91,8 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
                 boolean jaOcorreu = bundle.getBoolean(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU);
                 boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
                 Local local = Local.valueOf(localTexto);
+
+                partidaOriginal = new Partida(data, horario, adversario, local, competicao, resultadoCasa, resultadoFora, jaOcorreu, acompanheiPartida);
 
                 // Usar os parametros recuperados para atualizar os elementos da activity
                 editTextData.setText(data);
@@ -275,6 +278,24 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             }
         } else {
             acompanheiPartida = false;
+        }
+
+        if(modo == MODO_EDITAR &&
+                dataFormatada.equalsIgnoreCase(partidaOriginal.getData()) &&
+                horarioFormatado.equalsIgnoreCase(partidaOriginal.getHorario()) &&
+                adversario.equalsIgnoreCase(partidaOriginal.getAdversario()) &&
+                (localPartida.toString()).equalsIgnoreCase(String.valueOf(partidaOriginal.getLocal())) &&
+                competicao == partidaOriginal.getCompeticao() &&
+                acompanheiPartida == partidaOriginal.isAcompanheiPartida() &&
+                partidaOcorreu == partidaOriginal.isJaOcorreu() &&
+                resultadoCasa == partidaOriginal.getResultadoCasa() &&
+                resultadoFora == partidaOriginal.getResultadoFora()){
+
+            // Valores iguais, sem alteração
+            setResult(CadastrarPartidaActivity.RESULT_CANCELED);
+            finish();
+            return;
+
         }
 
         Intent intentResposta = new Intent();

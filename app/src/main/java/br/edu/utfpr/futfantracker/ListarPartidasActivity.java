@@ -1,10 +1,13 @@
 package br.edu.utfpr.futfantracker;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,29 +31,71 @@ public class ListarPartidasActivity extends AppCompatActivity {
     private List<Partida> listaPartidas;
     private PartidaAdapter partidaAdapter;
     private int posicaoSelecionada = -1;
+    private ActionMode actionMode;
+    private View viewSelecionada;
+    private Drawable backgroundDrawable;
+
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.partidas_item_selecionado, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            int idMenuItem = item.getItemId();
+
+            if(idMenuItem == R.id.menuItemEditar){
+                editarPartida();
+                return true;
+            } else if(idMenuItem == R.id.menuItemExcluir){
+                excluirPessoa();
+                mode.finish();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+            if(viewSelecionada!=null){
+                viewSelecionada.setBackground(backgroundDrawable);
+            }
+
+            actionMode = null;
+            viewSelecionada = null;
+            backgroundDrawable = null;
+            listViewPartidas.setEnabled(true);
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_partidas);
         setTitle(getString(R.string.partidas));
-
         listViewPartidas = findViewById(R.id.listViewPartidas);
 
         // Registra o Contexto do Menu de Contexto (o listview criado pra exibir os objetos)
-        registerForContextMenu(listViewPartidas);
+        // registerForContextMenu(listViewPartidas);
 
-        listViewPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Partida partida = (Partida) listViewPartidas.getItemAtPosition(position);
-
-                Toast.makeText(getApplicationContext(),
-                               getString(R.string.a_partida_com_o)+partida.getAdversario()+getString(R.string.foi_selecionada),
-                               Toast.LENGTH_LONG).show();
-            }
-        });
-
+//        listViewPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                editarPartida();
+//            }
+//        });
         popularListaPartidas();
     }
 
@@ -99,6 +145,33 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
         // Usando o adapter customizado para exibir os dados formatados como desejado
         partidaAdapter = new PartidaAdapter(this, listaPartidas);
+
+        listViewPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                posicaoSelecionada = position;
+                editarPartida();
+            }
+        });
+
+        listViewPartidas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(actionMode != null){
+                    return false;
+                }
+
+                posicaoSelecionada = position;
+                viewSelecionada = view;
+                backgroundDrawable = view.getBackground();
+                view.setBackgroundColor(Color.LTGRAY);
+                listViewPartidas.setEnabled(false);
+                actionMode = startSupportActionMode(actionModeCallback);
+                return true;
+            }
+        });
+
         listViewPartidas.setAdapter(partidaAdapter);
     }
 
@@ -167,8 +240,8 @@ public class ListarPartidasActivity extends AppCompatActivity {
     }
 
     // Novo metodo para o menu de contexto
-    private void excluirPessoa(int position){
-        listaPartidas.remove(position);
+    private void excluirPessoa(){
+        listaPartidas.remove(posicaoSelecionada);
         partidaAdapter.notifyDataSetChanged();
     }
 
@@ -219,16 +292,17 @@ public class ListarPartidasActivity extends AppCompatActivity {
                     }
 
                     posicaoSelecionada = -1;
+
+                    if(actionMode != null){
+                        actionMode.finish();
+                    }
                 }
             }
     );
 
-    private void editarPartida(int position){
-        // Armazenando qual a posição selecionada da lista
-        posicaoSelecionada = position;
-
+    private void editarPartida(){
         // Um objeto para receber o objeto selecionado da lista
-        Partida partida = listaPartidas.get(position);
+        Partida partida = listaPartidas.get(posicaoSelecionada);
 
         // intent de abertura da activity de cadastro
         Intent intentAbertura = new Intent(this, CadastrarPartidaActivity.class);
@@ -257,13 +331,13 @@ public class ListarPartidasActivity extends AppCompatActivity {
     }
 
     // Criando o menu do contexto (item selecionado)
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        // Uso um inflater e inflo o menu indicando o layout dele
-        getMenuInflater().inflate(R.menu.partidas_item_selecionado, menu);
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//
+//        // Uso um inflater e inflo o menu indicando o layout dele
+//        getMenuInflater().inflate(R.menu.partidas_item_selecionado, menu);
+//    }
 
     // Tratamento de evento para o menu de opções (barra superior)
     @Override
@@ -281,23 +355,23 @@ public class ListarPartidasActivity extends AppCompatActivity {
     }
 
     // Tratamento de evento para o menu de contexto (item selecionado)
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int idMenuItem = item.getItemId();
-
-        // como foi usado ListView, isso resolve. Se fosse RecyclerView, precisava de outra
-        // Abordagem pra ter conhecimento da posição selecionada pelo usuário
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        // Checagem do menu selecionado e de qual metodo é disparado
-        if(idMenuItem == R.id.menuItemEditar){
-            editarPartida(info.position);
-            return true;
-        } else if(idMenuItem == R.id.menuItemExcluir){
-            excluirPessoa(info.position);
-            return true;
-        } else {
-            return super.onContextItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onContextItemSelected(@NonNull MenuItem item) {
+//        int idMenuItem = item.getItemId();
+//
+//        // como foi usado ListView, isso resolve. Se fosse RecyclerView, precisava de outra
+//        // Abordagem pra ter conhecimento da posição selecionada pelo usuário
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//
+//        // Checagem do menu selecionado e de qual metodo é disparado
+//        if(idMenuItem == R.id.menuItemEditar){
+//            editarPartida(info.position);
+//            return true;
+//        } else if(idMenuItem == R.id.menuItemExcluir){
+//            excluirPessoa(info.position);
+//            return true;
+//        } else {
+//            return super.onContextItemSelected(item);
+//        }
+//    }
 }
