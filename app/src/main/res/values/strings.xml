@@ -52,4 +52,7 @@
     <string name="excluir">Excluir</string>
     <string name="editar_partida">Editar Partida</string>
     <string name="sugerir_competicao">Sugerir Competição</string>
+    <string name="ordenacao">Ordenação</string>
+    <string name="restaurar_padroes">Restaurar Padrões</string>
+    <string name="as_configuracoes_foram_restauradas_ao_padrao">As configurações foram restauradas ao padrão</string>
 </resources>

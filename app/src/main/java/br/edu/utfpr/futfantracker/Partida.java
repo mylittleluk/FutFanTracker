@@ -25,6 +25,24 @@ public class Partida {
         }
     };
 
+    public static Comparator<Partida> ordenacaoPorDataDecrescente = new Comparator<Partida>() {
+        @Override
+        public int compare(Partida p1, Partida p2) {
+            int result = 0;
+            SimpleDateFormat padraoEntradaData = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                // String source -> Date Target
+                Date datap1 = padraoEntradaData.parse(p1.getData());
+                Date datap2 = padraoEntradaData.parse(p2.getData());
+                result = -1 * (datap1.compareTo(datap2));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            return result;
+        }
+    };
+
     private String data, horario, adversario;
     private Local local;
     private int competicao, resultadoCasa, resultadoFora;

@@ -1,11 +1,12 @@
 package br.edu.utfpr.futfantracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,13 @@ public class ListarPartidasActivity extends AppCompatActivity {
     private View viewSelecionada;
     private Drawable backgroundDrawable;
     public static final String ARQUIVO_PREFERENCIAS = "br.edu.utfpr.futfantracker.PREFERENCIAS";
+    public static final String KEY_ORDENACAO_CRESCENTE = "ORDENACAO_CRESCENTE";
 
+    // Util porque só um lugar é alterado e todos os lugares que dependem
+    // desse valor já são alterados automaticamente
+    public static final boolean PADRAO_INICIAL_ORDENACAO_CRESCENTE = true;
+    private boolean ordenacaoDataCrescente = PADRAO_INICIAL_ORDENACAO_CRESCENTE;
+    private MenuItem menuItemOrdenacao;
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -98,6 +105,8 @@ public class ListarPartidasActivity extends AppCompatActivity {
 //                editarPartida();
 //            }
 //        });
+        lerPreferencias();
+
         popularListaPartidas();
     }
 
@@ -220,11 +229,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             // Adicionar o objeto partida no ArrayList de Partidas
                             listaPartidas.add(partida);
 
-                            Collections.sort(listaPartidas, Partida.ordenacaoPorData);
-
-                            // Notificar o adapter customizado que os dados foram atualizados
-                            // pra que possa ser atualizado
-                            partidaAdapter.notifyDataSetChanged();
+                            ordenarLista();
                         }
                     }
                 }
@@ -289,11 +294,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             partida.setJaOcorreu(jaOcorreu);
                             partida.setAcompanheiPartida(acompanheiPartida);
 
-                            Collections.sort(listaPartidas, Partida.ordenacaoPorData);
-
-                            // Notificar o adapter customizado que os dados foram atualizados
-                            // pra que possa ser atualizado
-                            partidaAdapter.notifyDataSetChanged();
+                            ordenarLista();
                         }
                     }
 
@@ -329,10 +330,22 @@ public class ListarPartidasActivity extends AppCompatActivity {
         launcherEditarPartida.launch(intentAbertura);
     }
 
-    // Criando o menu da barra superior
+    // Chamado 1x, quando o menu é criado
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.listar_partidas_menu, menu);
+
+        // Recuperar o ID do menu selecionado pra salvar num atributo
+        menuItemOrdenacao = menu.findItem(R.id.menuItemOrdenacao);
+        return true;
+    }
+
+    // Antes do menu ser exibido, eu preciso garantir a exibição do icone correto
+    // referente a ordenação escolhida e salva no sharedpreferences, pra evitar de
+    // mostrar o icone numa ordenacao e a ordenacao salva/aplicada ser a contraria
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        atualizarIconeDeOrdenacao();
         return true;
     }
 
@@ -354,6 +367,21 @@ public class ListarPartidasActivity extends AppCompatActivity {
             return true;
         } else if (idMenuItem == R.id.menuItemSobre){
             abrirSobre();
+            return true;
+        } else if (idMenuItem == R.id.menuItemOrdenacao){
+            salvarPreferenciaDeOrdenacaoCrescente(!ordenacaoDataCrescente);
+            atualizarIconeDeOrdenacao();
+            // Pra que a opção selecionada ja tenha sua ordenação aplicada imediatamente
+            // e não só fique salva na preferencia pra ser aplicada posteriormente
+            ordenarLista();
+            return true;
+        } else if (idMenuItem == R.id.menuItemRestaurar){
+            restaurarPreferencias();
+            atualizarIconeDeOrdenacao();
+            ordenarLista();
+            Toast.makeText(this,
+                           R.string.as_configuracoes_foram_restauradas_ao_padrao,
+                           Toast.LENGTH_LONG).show();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -380,4 +408,42 @@ public class ListarPartidasActivity extends AppCompatActivity {
 //            return super.onContextItemSelected(item);
 //        }
 //    }
+
+    private void ordenarLista(){
+        if(ordenacaoDataCrescente){
+            Collections.sort(listaPartidas, Partida.ordenacaoPorData);
+        } else {
+            Collections.sort(listaPartidas, Partida.ordenacaoPorDataDecrescente);
+        }
+        partidaAdapter.notifyDataSetChanged();
+    }
+
+    private void atualizarIconeDeOrdenacao(){
+        if(ordenacaoDataCrescente){
+            menuItemOrdenacao.setIcon(R.drawable.ic_action_ascending_sort);
+        } else {
+            menuItemOrdenacao.setIcon(R.drawable.ic_action_descending_sort);
+        }
+    }
+
+    private void lerPreferencias(){
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        shared.getBoolean(KEY_ORDENACAO_CRESCENTE, ordenacaoDataCrescente);
+    }
+
+    private void salvarPreferenciaDeOrdenacaoCrescente(boolean novoValor){
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putBoolean(KEY_ORDENACAO_CRESCENTE, novoValor);
+        editor.commit();
+        ordenacaoDataCrescente = novoValor;
+    }
+
+    private void restaurarPreferencias(){
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.clear();
+        editor.commit();
+        ordenacaoDataCrescente = PADRAO_INICIAL_ORDENACAO_CRESCENTE;
+    }
 }
