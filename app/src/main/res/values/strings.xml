@@ -53,4 +53,9 @@
     <string name="o_spinner_competicoes_nao_possui_valores">Tournament Spinner is empty</string>
     <string name="partida_ja_ocorreu">Match already happened</string>
     <string name="partida_ainda_nao_ocorreu">Match has not taken place yet</string>
+    <string name="aviso">Warning</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="do_you_want_to_delete_the_match_with">Do you want to delete the match with \"</string>
+    <string name="do_you_want_to_restore_default_settings">Do you want to restore default settings ?</string>
 </resources>

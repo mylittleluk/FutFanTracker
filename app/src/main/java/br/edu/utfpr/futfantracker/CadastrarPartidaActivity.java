@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 //import java.util.ArrayList;
 import java.util.Date;
 
+import br.edu.utfpr.futfantracker.utils.UtilsAlert;
+
 public class CadastrarPartidaActivity extends AppCompatActivity {
 
     public static final String KEY_DATA = "KEY_DATA";
@@ -168,9 +170,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData.requestFocus();
         spinnerCompeticao.setSelection(0);
 
-        Toast.makeText(this,
-                       getString(R.string.os_campos_foram_limpos),
-                       Toast.LENGTH_LONG).show();
+        UtilsAlert.mostrarAviso(this, R.string.os_campos_foram_limpos);
     }
 
     public void salvarCampos(){
@@ -195,9 +195,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             dataFormatada = padraoEntradaData.format(dataValidada);
 
         } catch (Exception e){
-            Toast.makeText(this,
-                    R.string.por_favor_preencha_uma_data_valida,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this, R.string.por_favor_preencha_uma_data_valida);
             editTextData.requestFocus();
             return;
         }
@@ -210,18 +208,14 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             horarioValidado = padraoEntradaHorario.parse(horarioInserido);
             horarioFormatado = padraoEntradaHorario.format(horarioValidado);
         } catch (Exception e){
-            Toast.makeText(this,
-                    R.string.por_favor_insira_um_horario_valido,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,R.string.por_favor_insira_um_horario_valido);
             editTextHorario.requestFocus();
             return;
         }
 
         // Validação Adversário
         if(adversario == null || adversario.trim().isEmpty()){
-            Toast.makeText(this,
-                    R.string.por_favor_preencha_o_adversario,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,R.string.por_favor_preencha_o_adversario);
             editTextAdversario.requestFocus();
             return;
         }
@@ -237,18 +231,14 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         } else if (radioButtonId == R.id.radioButtonFora){
             localPartida = Local.Fora;
         } else {
-            Toast.makeText(this,
-                    R.string.por_favor_preencha_o_local_adequadamente,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,R.string.por_favor_preencha_o_local_adequadamente);
             return;
         }
 
         // Check Spinner competições
         competicao = spinnerCompeticao.getSelectedItemPosition();
         if(competicao == AdapterView.INVALID_POSITION){
-            Toast.makeText(this,
-                    R.string.o_spinner_competicoes_nao_possui_valores,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,R.string.o_spinner_competicoes_nao_possui_valores);
             return;
         }
 
@@ -280,9 +270,7 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
                 // Booleano de controle de resultados válidos
                 //resultadosValidos = true;
             }catch(Exception e){
-                Toast.makeText(this,
-                              R.string.por_favor_insira_o_resultado_adequadamente,
-                              Toast.LENGTH_LONG).show();
+                UtilsAlert.mostrarAviso(this,R.string.por_favor_insira_o_resultado_adequadamente);
                 return;
             }
         }

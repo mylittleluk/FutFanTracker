@@ -6,4 +6,6 @@
         <item name="colorPrimaryVariant">@color/cinza_escuro</item>
         <item name="colorOnPrimary">@color/preto</item>
     </style>
+
+    <color name="corSelecionado">@color/cinza_transparente</color>
 </resources>

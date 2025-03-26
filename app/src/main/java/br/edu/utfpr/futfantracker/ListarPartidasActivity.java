@@ -1,6 +1,7 @@
 package br.edu.utfpr.futfantracker;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import androidx.appcompat.view.ActionMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import br.edu.utfpr.futfantracker.utils.UtilsAlert;
 
 public class ListarPartidasActivity extends AppCompatActivity {
 
@@ -66,8 +69,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
                 editarPartida();
                 return true;
             } else if(idMenuItem == R.id.menuItemExcluir){
-                excluirPessoa();
-                mode.finish();
+                excluirPartida();
                 return true;
             } else {
                 return false;
@@ -176,7 +178,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
                 posicaoSelecionada = position;
                 viewSelecionada = view;
                 backgroundDrawable = view.getBackground();
-                view.setBackgroundColor(Color.LTGRAY);
+                view.setBackgroundColor(getColor(R.color.corSelecionado));
                 listViewPartidas.setEnabled(false);
                 actionMode = startSupportActionMode(actionModeCallback);
                 return true;
@@ -249,9 +251,19 @@ public class ListarPartidasActivity extends AppCompatActivity {
     }
 
     // Novo metodo para o menu de contexto
-    private void excluirPessoa(){
-        listaPartidas.remove(posicaoSelecionada);
-        partidaAdapter.notifyDataSetChanged();
+    private void excluirPartida(){
+        Partida partida = listaPartidas.get(posicaoSelecionada);
+        String mensagem = getString(R.string.do_you_want_to_delete_the_match_with)+ partida.getAdversario() +"\" ?";
+        DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                listaPartidas.remove(posicaoSelecionada);
+                partidaAdapter.notifyDataSetChanged();
+                actionMode.finish();
+            }
+        };
+        UtilsAlert.confirmarAcao(this, mensagem, listenerSim, null);
+
     }
 
     ActivityResultLauncher<Intent> launcherEditarPartida = registerForActivityResult(
@@ -376,12 +388,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
             ordenarLista();
             return true;
         } else if (idMenuItem == R.id.menuItemRestaurar){
-            restaurarPreferencias();
-            atualizarIconeDeOrdenacao();
-            ordenarLista();
-            Toast.makeText(this,
-                           R.string.as_configuracoes_foram_restauradas_ao_padrao,
-                           Toast.LENGTH_LONG).show();
+            confirmarRestaurarPadroes();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -437,6 +444,23 @@ public class ListarPartidasActivity extends AppCompatActivity {
         editor.putBoolean(KEY_ORDENACAO_CRESCENTE, novoValor);
         editor.commit();
         ordenacaoDataCrescente = novoValor;
+    }
+
+    private void confirmarRestaurarPadroes(){
+        DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                restaurarPreferencias();
+                atualizarIconeDeOrdenacao();
+                ordenarLista();
+                Toast.makeText(ListarPartidasActivity.this,
+                        R.string.as_configuracoes_foram_restauradas_ao_padrao,
+                        Toast.LENGTH_LONG).show();
+            }
+        };
+
+        UtilsAlert.confirmarAcao(this, R.string.do_you_want_to_restore_default_settings, listenerSim, null);
     }
 
     private void restaurarPreferencias(){

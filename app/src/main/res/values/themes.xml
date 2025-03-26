@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/azul</item>
         <item name="colorPrimaryVariant">@color/azul_escuro</item>
         <item name="colorOnPrimary">@color/branco</item>
-
     </style>
+
+    <color name="corSelecionado">@color/azul_transparente</color>
 </resources>
