@@ -23,6 +23,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -294,7 +297,16 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
                             Local local = Local.valueOf(localTexto);
 
-                            Partida partida = listaPartidas.get(posicaoSelecionada);
+                            final Partida partida = listaPartidas.get(posicaoSelecionada);
+                            final Partida clonePartida;
+                            try {
+                                clonePartida = (Partida) partida.clone();
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                                UtilsAlert.mostrarAviso(ListarPartidasActivity.this,
+                                                        R.string.type_conversion_error);
+                                return;
+                            }
 
                             partida.setData(data);
                             partida.setHorario(horario);
@@ -307,6 +319,21 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             partida.setAcompanheiPartida(acompanheiPartida);
 
                             ordenarLista();
+
+                            final ConstraintLayout constraintLayout = findViewById(R.id.main);
+                            Snackbar snackbar = Snackbar.make(constraintLayout,
+                                                              R.string.data_update_done,
+                                                              Snackbar.LENGTH_LONG);
+                            snackbar.setAction(R.string.undo, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    listaPartidas.remove(partida);
+                                    listaPartidas.add(clonePartida);
+                                    ordenarLista();
+                                }
+                            });
+
+                            snackbar.show();
                         }
                     }
 

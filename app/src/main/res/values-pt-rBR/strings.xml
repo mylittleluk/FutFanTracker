@@ -52,4 +52,7 @@
     <string name="confirmation">Confirmação</string>
     <string name="do_you_want_to_delete_the_match_with">Você deseja apagar a partida com \"</string>
     <string name="do_you_want_to_restore_default_settings">Você deseja restaurar as configurações padrão ?</string>
+    <string name="undo">Desfazer</string>
+    <string name="data_update_done">Atualização dos dados finalizada</string>
+    <string name="type_conversion_error">Erro de conversão de dados</string>
 </resources>

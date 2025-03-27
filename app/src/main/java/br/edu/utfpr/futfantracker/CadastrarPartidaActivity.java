@@ -13,11 +13,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 //import java.util.ArrayList;
@@ -154,6 +157,18 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
 //    }
 
     public void limparCampos(){
+
+        final String data = editTextData.getText().toString();
+        final String horario = editTextHorario.getText().toString();
+        final String adversario = editTextAdversario.getText().toString();
+        final int local = radioGroupLocal.getCheckedRadioButtonId();
+        final boolean partidaOcorreu = checkBoxPartidaOcorreu.isChecked();
+        final boolean acompanheiPartida = checkBoxAcompanheiPartida.isChecked();
+        final String resultadoCasa = editTextResultadoCasa.getText().toString();
+        final String resultadoFora = editTextResultadoFora.getText().toString();
+        final int competicao = spinnerCompeticao.getSelectedItemPosition();
+
+
         editTextData.setText(null);
         editTextHorario.setText(null);
         editTextAdversario.setText(null);
@@ -170,7 +185,47 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         editTextData.requestFocus();
         spinnerCompeticao.setSelection(0);
 
-        UtilsAlert.mostrarAviso(this, R.string.os_campos_foram_limpos);
+        final ScrollView scrollView = findViewById(R.id.main);
+        final View viewComFoco = scrollView.findFocus();
+        Snackbar snackbar = Snackbar.make(scrollView,
+                                          R.string.os_campos_foram_limpos,
+                                          Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextData.setText(data);
+                editTextHorario.setText(horario);
+                editTextAdversario.setText(adversario);
+                checkBoxPartidaOcorreu.setChecked(partidaOcorreu);
+                checkBoxAcompanheiPartida.setChecked(acompanheiPartida);
+                spinnerCompeticao.setSelection(competicao);
+                editTextResultadoCasa.setText(resultadoCasa);
+                editTextResultadoFora.setText(resultadoFora);
+
+                if(partidaOcorreu){
+                    checkBoxAcompanheiPartida.setChecked(acompanheiPartida);
+                    if(acompanheiPartida){
+                        checkBoxAcompanheiPartida.setEnabled(acompanheiPartida);
+                    }
+                } else {
+                    checkBoxAcompanheiPartida.setChecked(false);
+                    checkBoxAcompanheiPartida.setEnabled(false);
+                }
+
+                if(local == R.id.radioButtonCasa){
+                    radioButtonCasa.setChecked(true);
+                } else if (local == R.id.radioButtonFora) {
+                    radioButtonFora.setChecked(true);
+                }
+
+                if(viewComFoco != null){
+                    viewComFoco.requestFocus();
+                }
+            }
+        });
+
+        snackbar.show();
+        //UtilsAlert.mostrarAviso(this, R.string.os_campos_foram_limpos);
     }
 
     public void salvarCampos(){

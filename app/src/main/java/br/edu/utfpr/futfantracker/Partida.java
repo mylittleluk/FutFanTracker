@@ -1,11 +1,13 @@
 package br.edu.utfpr.futfantracker;
 
+import androidx.annotation.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Partida {
+public class Partida implements Cloneable{
 
     public static Comparator<Partida> ordenacaoPorData = new Comparator<Partida>() {
         @Override
@@ -130,6 +132,13 @@ public class Partida {
 
     public void setAcompanheiPartida(boolean acompanheiPartida) {
         this.acompanheiPartida = acompanheiPartida;
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        // Clone raso pq a classe só tem atr primitivos ou imutáveis
+        return super.clone();
     }
 
     @Override
