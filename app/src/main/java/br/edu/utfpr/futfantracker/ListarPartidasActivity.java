@@ -32,6 +32,7 @@ import java.util.List;
 
 import br.edu.utfpr.futfantracker.modelo.Local;
 import br.edu.utfpr.futfantracker.modelo.Partida;
+import br.edu.utfpr.futfantracker.persistencia.PartidasDatabase;
 import br.edu.utfpr.futfantracker.utils.UtilsAlert;
 
 public class ListarPartidasActivity extends AppCompatActivity {
@@ -117,48 +118,15 @@ public class ListarPartidasActivity extends AppCompatActivity {
     }
 
     private void popularListaPartidas(){
-//        String[] partidas_datas = getResources().getStringArray(R.array.partida_datas);
-//        String[] partidas_horarios = getResources().getStringArray(R.array.partida_horarios);
-//        String[] partidas_adversarios = getResources().getStringArray(R.array.partida_adversarios);
-//        int[] partidas_competicoes = getResources().getIntArray(R.array.partida_competicoes);
-//        int[] partidas_locais = getResources().getIntArray(R.array.partida_locais);
-//        int[] partidas_resultado_casa = getResources().getIntArray(R.array.partida_resultado_casa);
-//        int[] partidas_resultado_fora = getResources().getIntArray(R.array.partida_resultado_fora);
-//        int[] partidas_ocorreu = getResources().getIntArray(R.array.partida_ocorreu);
 
-//        Partida partida;
-//        Local local;
-//        boolean partidaOcorreu;
+        PartidasDatabase database = PartidasDatabase.getInstance(this);
 
-        // "Transforma" os valores do Enum em um "array". "locais" tem os valores e "partidas_locais"
-        // vai ter as "chaves" pra esses valores, representados no enum.
-//        Local[] locais = Local.values();
-
-        listaPartidas = new ArrayList<>();
-//        for(int cont=0; cont<partidas_datas.length; cont++){
-//            partidaOcorreu = (partidas_ocorreu[cont]==1 ? true : false);
-//            local = locais[partidas_locais[cont]];
-//
-//            partida = new Partida(
-//                            partidas_datas[cont],
-//                            partidas_horarios[cont],
-//                            partidas_adversarios[cont],
-//                            local,
-//                            partidas_competicoes[cont],
-//                            partidas_resultado_casa[cont],
-//                            partidas_resultado_fora[cont],
-//                            partidaOcorreu
-//            );
-//
-//            listaPartidas.add(partida);
-//        }
-
-// Comentando Trecho com adapter antigo
-//        ArrayAdapter<Partida> adapter = new ArrayAdapter<>(this,
-//                                                            android.R.layout.simple_list_item_1,
-//                                                            listaPartidas);
-//        listViewPartidas.setAdapter(adapter);
-
+        // O Arraylist virou uma consulta ao database
+        if(ordenacaoDataCrescente){
+            listaPartidas = database.getPartidaDao().queryAllAscending();
+        } else {
+            listaPartidas = database.getPartidaDao().queryAllDescending();
+        }
 
         // Usando o adapter customizado para exibir os dados formatados como desejado
         partidaAdapter = new PartidaAdapter(this, listaPartidas);
@@ -217,20 +185,15 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
                         // Se o bundle não é nulo, extrair os parametros com os tipos adequados
                         if(bundle != null){
-                            String data = bundle.getString(CadastrarPartidaActivity.KEY_DATA);
-                            String horario = bundle.getString(CadastrarPartidaActivity.KEY_HORARIO);
-                            String adversario = bundle.getString(CadastrarPartidaActivity.KEY_ADVERSARIO);
-                            String localTexto = bundle.getString(CadastrarPartidaActivity.KEY_LOCAL);
-                            int competicao = bundle.getInt(CadastrarPartidaActivity.KEY_COMPETICAO);
-                            int resultadoCasa = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_CASA);
-                            int resultadoFora = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_FORA);
-                            boolean jaOcorreu = bundle.getBoolean(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU);
-                            boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
 
-                            // Criar o objeto partida com os parametros passados na outra activity
-                            Partida partida = new Partida(data, horario, adversario,
-                                    Local.valueOf(localTexto), competicao, resultadoCasa,
-                                    resultadoFora, jaOcorreu, acompanheiPartida);
+                            // Recupero o ID do objeto criado no banco
+                            long id = bundle.getLong(CadastrarPartidaActivity.KEY_ID);
+
+                            // Pego a instancia do database
+                            PartidasDatabase database = PartidasDatabase.getInstance(ListarPartidasActivity.this);
+
+                            // Pelo database recupero um objeto pelo ID dele e passo ele pra uma instancia da classe
+                            Partida partida = database.getPartidaDao().queryForId(id);
 
                             // Adicionar o objeto partida no ArrayList de Partidas
                             listaPartidas.add(partida);
@@ -256,11 +219,22 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
     // Novo metodo para o menu de contexto
     private void excluirPartida(){
-        Partida partida = listaPartidas.get(posicaoSelecionada);
+        final Partida partida = listaPartidas.get(posicaoSelecionada);
         String mensagem = getString(R.string.do_you_want_to_delete_the_match_with)+ partida.getAdversario() +"\" ?";
         DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                // Excluindo também do banco
+                PartidasDatabase database = PartidasDatabase.getInstance(ListarPartidasActivity.this);
+                int quantidadeAlterada = database.getPartidaDao().delete(partida);
+
+                // Erro na exclusão
+                if(quantidadeAlterada!=1){
+                    UtilsAlert.mostrarAviso(ListarPartidasActivity.this, R.string.error_trying_to_delete);
+                    return;
+                }
+
                 listaPartidas.remove(posicaoSelecionada);
                 partidaAdapter.notifyDataSetChanged();
                 actionMode.finish();
@@ -287,37 +261,20 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
                         // Se o bundle não é nulo, extrair os parametros com os tipos adequados
                         if(bundle != null){
-                            String data = bundle.getString(CadastrarPartidaActivity.KEY_DATA);
-                            String horario = bundle.getString(CadastrarPartidaActivity.KEY_HORARIO);
-                            String adversario = bundle.getString(CadastrarPartidaActivity.KEY_ADVERSARIO);
-                            String localTexto = bundle.getString(CadastrarPartidaActivity.KEY_LOCAL);
-                            int competicao = bundle.getInt(CadastrarPartidaActivity.KEY_COMPETICAO);
-                            int resultadoCasa = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_CASA);
-                            int resultadoFora = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_FORA);
-                            boolean jaOcorreu = bundle.getBoolean(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU);
-                            boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
-                            Local local = Local.valueOf(localTexto);
 
-                            final Partida partida = listaPartidas.get(posicaoSelecionada);
-                            final Partida clonePartida;
-                            try {
-                                clonePartida = (Partida) partida.clone();
-                            } catch (CloneNotSupportedException e) {
-                                e.printStackTrace();
-                                UtilsAlert.mostrarAviso(ListarPartidasActivity.this,
-                                                        R.string.type_conversion_error);
-                                return;
-                            }
+                            // partidaOriginal com os dados velhos pré edição
+                            final Partida partidaOriginal = listaPartidas.get(posicaoSelecionada);
 
-                            partida.setData(data);
-                            partida.setHorario(horario);
-                            partida.setAdversario(adversario);
-                            partida.setLocal(local);
-                            partida.setCompeticao(competicao);
-                            partida.setResultadoCasa(resultadoCasa);
-                            partida.setResultadoFora(resultadoFora);
-                            partida.setJaOcorreu(jaOcorreu);
-                            partida.setAcompanheiPartida(acompanheiPartida);
+                            // Recupero o ID do objeto criado no banco
+                            long id = bundle.getLong(CadastrarPartidaActivity.KEY_ID);
+
+                            // Pego a instancia do database
+                            final PartidasDatabase database = PartidasDatabase.getInstance(ListarPartidasActivity.this);
+
+                            // Pelo database recupero o objeto editado pelo ID dele e passo ele pra uma instancia da classe
+                            Partida partidaEditada = database.getPartidaDao().queryForId(id);
+
+                            listaPartidas.set(posicaoSelecionada, partidaEditada);
 
                             ordenarLista();
 
@@ -328,8 +285,19 @@ public class ListarPartidasActivity extends AppCompatActivity {
                             snackbar.setAction(R.string.undo, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    listaPartidas.remove(partida);
-                                    listaPartidas.add(clonePartida);
+
+                                    // Regravar no banco o objeto antes da edição
+                                    int quantidadeAlterada = database.getPartidaDao().update(partidaOriginal);
+
+                                    if(quantidadeAlterada!=1){
+                                        UtilsAlert.mostrarAviso(ListarPartidasActivity.this, R.string.error_trying_to_update);
+                                    }
+
+                                    // Desfez a adição do objeto novo alterado recém editado
+                                    listaPartidas.remove(partidaEditada);
+
+                                    // Adiciona o objeto velho por causa do Snackbar
+                                    listaPartidas.add(partidaOriginal);
                                     ordenarLista();
                                 }
                             });
@@ -356,15 +324,7 @@ public class ListarPartidasActivity extends AppCompatActivity {
 
         // Passando o modo e os parametros do objeto selecionado na abertura da activity de cadastro
         intentAbertura.putExtra(CadastrarPartidaActivity.KEY_MODO, CadastrarPartidaActivity.MODO_EDITAR); // Const Int
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_DATA, partida.getData()); // String
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_HORARIO, partida.getHorario()); // String
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_ADVERSARIO, partida.getAdversario()); // String
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_LOCAL, partida.getLocal().toString()); // Local
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_COMPETICAO, partida.getCompeticao()); // int
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU, partida.isJaOcorreu()); // boolean
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA, partida.isAcompanheiPartida()); // boolean
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_RESULTADO_CASA, partida.getResultadoCasa()); // int
-        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_RESULTADO_FORA, partida.getResultadoFora()); // int
+        intentAbertura.putExtra(CadastrarPartidaActivity.KEY_ID, partida.getId());
 
         // Chamar a abertura da outra activity via Intent criada (com o destino delimitado)
         launcherEditarPartida.launch(intentAbertura);

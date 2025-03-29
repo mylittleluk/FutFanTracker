@@ -60,5 +60,7 @@
     <string name="do_you_want_to_restore_default_settings">Do you want to restore default settings ?</string>
     <string name="undo">Undo</string>
     <string name="data_update_done">Data update done</string>
-    <string name="type_conversion_error">Type conversion error</string>
+    <string name="error_trying_to_insert">Error trying to insert</string>
+    <string name="error_trying_to_update">Error trying to update</string>
+    <string name="error_trying_to_delete">Error trying to delete</string>
 </resources>

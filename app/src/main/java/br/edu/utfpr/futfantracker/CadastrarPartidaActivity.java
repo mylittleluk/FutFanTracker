@@ -27,19 +27,11 @@ import java.util.Date;
 
 import br.edu.utfpr.futfantracker.modelo.Local;
 import br.edu.utfpr.futfantracker.modelo.Partida;
+import br.edu.utfpr.futfantracker.persistencia.PartidasDatabase;
 import br.edu.utfpr.futfantracker.utils.UtilsAlert;
 
 public class CadastrarPartidaActivity extends AppCompatActivity {
-
-    public static final String KEY_DATA = "KEY_DATA";
-    public static final String KEY_HORARIO = "KEY_HORARIO";
-    public static final String KEY_ADVERSARIO = "KEY_ADVERSARIO";
-    public static final String KEY_LOCAL = "KEY_LOCAL";
-    public static final String KEY_COMPETICAO = "KEY_COMPETICAO";
-    public static final String KEY_ACOMPANHEI_PARTIDA = "KEY_ACOMPANHEI_PARTIDA";
-    public static final String KEY_PARTIDA_OCORREU = "KEY_PARTIDA_OCORREU";
-    public static final String KEY_RESULTADO_CASA = "KEY_RESULTADO_CASA";
-    public static final String KEY_RESULTADO_FORA = "KEY_RESULTADO_FORA";
+    public static final String KEY_ID = "ID";
     public static final String KEY_MODO = "MODO";
     public static final String KEY_SUGERIR_COMPETICAO = "SUGERIR_COMPETICAO";
     public static final String KEY_ULTIMA_COMPETICAO = "ULTIMA_COMPETICAO";
@@ -101,35 +93,33 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
                 // Alterando o titulo da activity conforme o modo
                 setTitle(getString(R.string.editar_partida));
 
-                // Recuperando os parametros do objeto partida recebidos via intent de
-                // abertura da activity
-                String data = bundle.getString(CadastrarPartidaActivity.KEY_DATA);
-                String horario = bundle.getString(CadastrarPartidaActivity.KEY_HORARIO);
-                String adversario = bundle.getString(CadastrarPartidaActivity.KEY_ADVERSARIO);
-                String localTexto = bundle.getString(CadastrarPartidaActivity.KEY_LOCAL);
-                int competicao = bundle.getInt(CadastrarPartidaActivity.KEY_COMPETICAO);
-                int resultadoCasa = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_CASA);
-                int resultadoFora = bundle.getInt(CadastrarPartidaActivity.KEY_RESULTADO_FORA);
-                boolean jaOcorreu = bundle.getBoolean(CadastrarPartidaActivity.KEY_PARTIDA_OCORREU);
-                boolean acompanheiPartida = bundle.getBoolean(CadastrarPartidaActivity.KEY_ACOMPANHEI_PARTIDA);
-                Local local = Local.valueOf(localTexto);
-
-                partidaOriginal = new Partida(data, horario, adversario, local, competicao, resultadoCasa, resultadoFora, jaOcorreu, acompanheiPartida);
+                // Recuperando o objeto por meio do uso do ID vindo na chave do Bundle
+                // Acessando o database via Dao com uma query pelo ID, que é a chave
+                // primaria no meu SQLite
+                long id = bundle.getLong(KEY_ID);
+                PartidasDatabase database = PartidasDatabase.getInstance(this);
+                partidaOriginal = database.getPartidaDao().queryForId(id);
 
                 // Usar os parametros recuperados para atualizar os elementos da activity
-                editTextData.setText(data);
-                editTextHorario.setText(horario);
-                editTextAdversario.setText(adversario);
+                editTextData.setText(partidaOriginal.getData());
+                editTextHorario.setText(partidaOriginal.getHorario());
+                editTextAdversario.setText(partidaOriginal.getAdversario());
+
+                Local local = partidaOriginal.getLocal();
+
                 if(local == Local.Casa){
                     radioButtonCasa.setChecked(true);
                 } else if (local == Local.Fora) {
                     radioButtonFora.setChecked(true);
                 }
-                spinnerCompeticao.setSelection(competicao);
-                editTextResultadoCasa.setText(String.valueOf(resultadoCasa));
-                editTextResultadoFora.setText(String.valueOf(resultadoFora));
-                checkBoxPartidaOcorreu.setChecked(jaOcorreu);
-                checkBoxAcompanheiPartida.setChecked(acompanheiPartida);
+                spinnerCompeticao.setSelection(partidaOriginal.getCompeticao());
+                editTextResultadoCasa.setText(String.valueOf(partidaOriginal.getResultadoCasa()));
+                editTextResultadoFora.setText(String.valueOf(partidaOriginal.getResultadoFora()));
+                checkBoxPartidaOcorreu.setChecked(partidaOriginal.isJaOcorreu());
+                checkBoxAcompanheiPartida.setChecked(partidaOriginal.isAcompanheiPartida());
+
+                editTextData.requestFocus();
+                editTextData.setSelection(editTextData.getText().length());
 //                if(!jaOcorreu){
 //                    editTextResultadoCasa.setEnabled(false);
 //                    editTextResultadoFora.setEnabled(false);
@@ -340,38 +330,54 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
             acompanheiPartida = false;
         }
 
-        if(modo == MODO_EDITAR &&
-                dataFormatada.equalsIgnoreCase(partidaOriginal.getData()) &&
-                horarioFormatado.equalsIgnoreCase(partidaOriginal.getHorario()) &&
-                adversario.equalsIgnoreCase(partidaOriginal.getAdversario()) &&
-                (localPartida.toString()).equalsIgnoreCase(String.valueOf(partidaOriginal.getLocal())) &&
-                competicao == partidaOriginal.getCompeticao() &&
-                acompanheiPartida == partidaOriginal.isAcompanheiPartida() &&
-                partidaOcorreu == partidaOriginal.isJaOcorreu() &&
-                resultadoCasa == partidaOriginal.getResultadoCasa() &&
-                resultadoFora == partidaOriginal.getResultadoFora()){
+        Partida partida = new Partida(dataFormatada,
+                                      horarioFormatado,
+                                      adversario,
+                                      localPartida,
+                                      competicao,
+                                      resultadoCasa,
+                                      resultadoFora,
+                                      partidaOcorreu,
+                                      acompanheiPartida);
 
+        if(partida.equals(partidaOriginal)){
             // Valores iguais, sem alteração
             setResult(CadastrarPartidaActivity.RESULT_CANCELED);
             finish();
             return;
+        }
 
+        Intent intentResposta = new Intent();
+
+        PartidasDatabase database = PartidasDatabase.getInstance(this);
+
+        if(modo == MODO_NOVO){
+            // o metodo de inserção retorna um long id
+            long novoId = database.getPartidaDao().insert(partida);
+
+            // Houve algum problema na inserção
+            if(novoId < 0){
+                UtilsAlert.mostrarAviso(this, R.string.error_trying_to_insert);
+                return;
+            }
+
+            // ID novo recém criado do objeto novo
+            partida.setId(novoId);
+
+        } else {
+             partida.setId(partidaOriginal.getId());
+             int quantidadeAlterada = database.getPartidaDao().update(partida);
+
+             // Checar o resultado do metodo update
+             if(quantidadeAlterada!=1){
+                 UtilsAlert.mostrarAviso(this, R.string.error_trying_to_update);
+                 return;
+             }
         }
 
         // salvar a ultima cometicao selecionada no sharedpreferences
         salvarUltimaCompeticao(competicao);
-
-        Intent intentResposta = new Intent();
-        intentResposta.putExtra(KEY_DATA, dataFormatada);
-        intentResposta.putExtra(KEY_HORARIO, horarioFormatado);
-        intentResposta.putExtra(KEY_ADVERSARIO, adversario);
-        intentResposta.putExtra(KEY_LOCAL, localPartida.toString());
-        intentResposta.putExtra(KEY_COMPETICAO, competicao);
-        intentResposta.putExtra(KEY_ACOMPANHEI_PARTIDA, acompanheiPartida);
-        intentResposta.putExtra(KEY_PARTIDA_OCORREU, partidaOcorreu);
-        intentResposta.putExtra(KEY_RESULTADO_CASA, resultadoCasa);
-        intentResposta.putExtra(KEY_RESULTADO_FORA, resultadoFora);
-
+        intentResposta.putExtra(KEY_ID, partida.getId());
         setResult(CadastrarPartidaActivity.RESULT_OK, intentResposta);
         finish();
 

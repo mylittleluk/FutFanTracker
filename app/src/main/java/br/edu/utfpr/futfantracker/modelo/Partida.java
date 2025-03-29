@@ -1,6 +1,7 @@
 package br.edu.utfpr.futfantracker.modelo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -9,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Partida implements Cloneable{
@@ -161,6 +163,31 @@ public class Partida implements Cloneable{
     public Object clone() throws CloneNotSupportedException {
         // Clone raso pq a classe só tem atr primitivos ou imutáveis
         return super.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Partida partida = (Partida) o;
+
+        return competicao == partida.competicao &&
+                resultadoCasa == partida.resultadoCasa &&
+                resultadoFora == partida.resultadoFora &&
+                jaOcorreu == partida.jaOcorreu &&
+                acompanheiPartida == partida.acompanheiPartida &&
+                data.equals(partida.data) &&
+                horario.equals(partida.horario) &&
+                adversario.equals(partida.adversario) &&
+                local == partida.local;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data, horario, adversario, local, competicao, resultadoCasa, resultadoFora, jaOcorreu, acompanheiPartida);
     }
 
     @Override
