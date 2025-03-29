@@ -15,7 +15,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,8 @@ import java.text.SimpleDateFormat;
 //import java.util.ArrayList;
 import java.util.Date;
 
+import br.edu.utfpr.futfantracker.modelo.Local;
+import br.edu.utfpr.futfantracker.modelo.Partida;
 import br.edu.utfpr.futfantracker.utils.UtilsAlert;
 
 public class CadastrarPartidaActivity extends AppCompatActivity {

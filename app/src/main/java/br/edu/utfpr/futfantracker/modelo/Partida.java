@@ -1,12 +1,16 @@
-package br.edu.utfpr.futfantracker;
+package br.edu.utfpr.futfantracker.modelo;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
+@Entity
 public class Partida implements Cloneable{
 
     public static Comparator<Partida> ordenacaoPorData = new Comparator<Partida>() {
@@ -45,10 +49,20 @@ public class Partida implements Cloneable{
         }
     };
 
-    private String data, horario, adversario;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    private String data;
+    private String horario;
+    private String adversario;
+    @NonNull
+    @ColumnInfo(index = true)
     private Local local;
-    private int competicao, resultadoCasa, resultadoFora;
-    private boolean jaOcorreu, acompanheiPartida;
+    private int competicao;
+    private int resultadoCasa;
+    private int resultadoFora;
+    private boolean jaOcorreu;
+    private boolean acompanheiPartida;
 
     public Partida(String data, String horario, String adversario, Local local, int competicao, int resultadoCasa, int resultadoFora, boolean jaOcorreu, boolean acompanheiPartida) {
         this.data = data;
@@ -60,6 +74,14 @@ public class Partida implements Cloneable{
         this.resultadoFora = resultadoFora;
         this.jaOcorreu = jaOcorreu;
         this.acompanheiPartida = acompanheiPartida;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public boolean isJaOcorreu() {
@@ -136,7 +158,7 @@ public class Partida implements Cloneable{
 
     @NonNull
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         // Clone raso pq a classe só tem atr primitivos ou imutáveis
         return super.clone();
     }

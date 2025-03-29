@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.edu.utfpr.futfantracker.modelo.Partida;
+
 public class PartidaAdapter extends BaseAdapter {
     private Context context;
     private List<Partida> listaPartidas;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 //import android.widget.ArrayAdapter;
@@ -31,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.edu.utfpr.futfantracker.modelo.Local;
+import br.edu.utfpr.futfantracker.modelo.Partida;
 import br.edu.utfpr.futfantracker.utils.UtilsAlert;
 
 public class ListarPartidasActivity extends AppCompatActivity {
