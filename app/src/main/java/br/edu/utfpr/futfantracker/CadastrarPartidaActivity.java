@@ -120,32 +120,10 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
 
                 editTextData.requestFocus();
                 editTextData.setSelection(editTextData.getText().length());
-//                if(!jaOcorreu){
-//                    editTextResultadoCasa.setEnabled(false);
-//                    editTextResultadoFora.setEnabled(false);
-//                    checkBoxAcompanheiPartida.setEnabled(false);
-//                }
             }
         }
 
-        //popularSpinner();
-
     }
-
-//    private void popularSpinner(){
-//        ArrayList<String> competicoes = new ArrayList<>();
-//        competicoes.add(getString(R.string.campeonato_estadual));
-//        competicoes.add(getString(R.string.campeonato_brasileiro));
-//        competicoes.add(getString(R.string.copa_do_brasil));
-//        competicoes.add(getString(R.string.copa_libertadores));
-//        competicoes.add(getString(R.string.copa_sulamericana));
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                                                         android.R.layout.simple_list_item_1,
-//                                                         competicoes);
-//
-//        spinnerCompeticao.setAdapter(adapter);
-//    }
 
     public void limparCampos(){
 
@@ -381,16 +359,6 @@ public class CadastrarPartidaActivity extends AppCompatActivity {
         setResult(CadastrarPartidaActivity.RESULT_OK, intentResposta);
         finish();
 
-
-//        Toast.makeText(this,
-//                       getString(R.string.data_valor)+dataFormatada+"\n"
-//                       +getString(R.string.horario_valor)+horarioFormatado+"\n"
-//                       +getString(R.string.adversario_valor)+adversario+"\n"
-//                       +getString(R.string.local_valor)+localPartida+"\n"
-//                       +getString(R.string.competicao_valor)+competicao+"\n"
-//                       +(acompanheiPartida ? getString(R.string.acompanhei_a_partida) : getString(R.string.nao_acompanhei_a_partida))+"\n"
-//                       +(partidaOcorreu && resultadosValidos ? getString(R.string.placar_valor)+resultadoCasa+getString(R.string.x_valor)+resultadoFora : getString(R.string.partida_ainda_nao_ocorreu) ),
-//                       Toast.LENGTH_LONG).show();
     }
 
     // Metodo de controle dos elementos da partida de acordo com estado do CheckBox

@@ -103,15 +103,6 @@ public class ListarPartidasActivity extends AppCompatActivity {
         setTitle(getString(R.string.partidas));
         listViewPartidas = findViewById(R.id.listViewPartidas);
 
-        // Registra o Contexto do Menu de Contexto (o listview criado pra exibir os objetos)
-        // registerForContextMenu(listViewPartidas);
-
-//        listViewPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                editarPartida();
-//            }
-//        });
         lerPreferencias();
 
         popularListaPartidas();
@@ -349,15 +340,6 @@ public class ListarPartidasActivity extends AppCompatActivity {
         return true;
     }
 
-    // Criando o menu do contexto (item selecionado)
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//
-//        // Uso um inflater e inflo o menu indicando o layout dele
-//        getMenuInflater().inflate(R.menu.partidas_item_selecionado, menu);
-//    }
-
     // Tratamento de evento para o menu de opções (barra superior)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -382,27 +364,6 @@ public class ListarPartidasActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    // Tratamento de evento para o menu de contexto (item selecionado)
-//    @Override
-//    public boolean onContextItemSelected(@NonNull MenuItem item) {
-//        int idMenuItem = item.getItemId();
-//
-//        // como foi usado ListView, isso resolve. Se fosse RecyclerView, precisava de outra
-//        // Abordagem pra ter conhecimento da posição selecionada pelo usuário
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        // Checagem do menu selecionado e de qual metodo é disparado
-//        if(idMenuItem == R.id.menuItemEditar){
-//            editarPartida(info.position);
-//            return true;
-//        } else if(idMenuItem == R.id.menuItemExcluir){
-//            excluirPessoa(info.position);
-//            return true;
-//        } else {
-//            return super.onContextItemSelected(item);
-//        }
-//    }
 
     private void ordenarLista(){
         if(ordenacaoDataCrescente){
